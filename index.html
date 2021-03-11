@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Test Vue 3</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="hidden">
+    <div class="box" id="app">
+        <h1>Тест на тему инвестиций</h1>
+        <div class="question">
+            <div v-if="index < count">
+                <h3 class="question-title">{{ questions[index]['question'] }}</h3>
+                <label
+                    class="form-label"
+                    :for="key"
+                    v-for="answer,key in questions[index]['answers']"
+                    :class="{'form-label' : selectedAnswer == ''},
+                    {'_green' : key == questions[index]['correctAnswer'] && selectedAnswer != ''},
+                    {'_red' : selectedAnswer == key}">
+                    <input
+                        type="radio"
+                        :id="key"
+                        :value="key"
+                        @change="answered($event)"
+                        v-model="selectedAnswer"
+                        :disabled="selectedAnswer != ''">
+                    {{ answer }}
+                </label>
+                <div class="btn-form">
+                    <button
+                        class="btn"
+                        v-show="selectedAnswer != '' && index < count-1"
+                        @click="nextQuestion">
+                        Далее
+                    </button>
+                    <button
+                        class="btn"
+                        v-show="selectedAnswer != '' && index == count-1"
+                        @click="showResults">
+                        Посмотреть результаты
+                    </button>
+                </div>
+            </div>
+            <div v-else>
+                <h3 class="question-title">Результаты</h3>
+                <div class="count">
+                    <p>Количество правильных ответов: <span>{{ correctAnswer }}</span></p>
+                    <p>Количество неверных ответов: <span>{{ wrongAnswer }}</span></p>
+                </div>
+                <div class="btn-form">
+                    <button class="btn" @click="resetTest">Пройти снова</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="app.js"></script>
+</body>
+</html>
